@@ -129,7 +129,8 @@ EOF
 persist_path_dir() {
   local dir="$1"
   detect_shell_rc_files | while read -r rc; do
-    local tmp="$(mktemp)"
+    local tmp
+    tmp="$(mktemp)"
     if [ -f "${rc}" ]; then
       awk 'BEGIN{skip=0} />>> prese setup PATH >>>/{skip=1} /<<< prese setup PATH <<</{skip=0; next} skip==0{print}' "${rc}" > "${tmp}" || true
       mv "${tmp}" "${rc}"
@@ -159,7 +160,6 @@ menu_select() {
     done
     IFS= read -rsn1 key || key=""
     case "$key" in
-      "") printf "" ;;
       $'\x1b')
         read -rsn2 key || true
         case "$key" in
@@ -167,7 +167,6 @@ menu_select() {
           "[B") [ $selected -lt $((${#options[@]}-1)) ] && selected=$((selected+1)) ;;
         esac
         ;;
-      "") ;;
       $'\x0a'|$'\x0d')
         stty echo icanon >/dev/null 2>&1 || true
         trap - EXIT
