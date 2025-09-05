@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-. "$(dirname "$0")/lib.sh"
+. "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib.sh"
 
 github_check_username_exists() {
   local username="$1"

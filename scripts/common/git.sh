@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-. "$(dirname "$0")/lib.sh"
+. "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib.sh"
 
 git_detect() {
   if command_exists git; then

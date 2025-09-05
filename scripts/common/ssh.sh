@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-. "$(dirname "$0")/lib.sh"
+. "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib.sh"
 
 ssh_ensure_permissions() {
   mkdir -p "${HOME}/.ssh"
