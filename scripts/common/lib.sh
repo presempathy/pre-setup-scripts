@@ -82,7 +82,7 @@ run() {
     say "${YELLOW}${DOT} dry-run, command not executed${RESET}"
     return 0
   fi
-  if eval "$@"; then
+  if bash -lc "$*"; then
     say "${GREEN}${CHECK} ok${RESET}"
     return 0
   else
