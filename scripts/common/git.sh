@@ -42,6 +42,10 @@ git_configure_best_practices() {
   run "git config --global init.defaultBranch main"
   run "git config --global pull.rebase false"
   run "git config --global fetch.prune true"
+  run "git config --global push.autoSetupRemote true"
+  run "git config --global tag.sort -version:refname"
+  run "git config --global rebase.autoStash true"
+  run "git config --global merge.ff only"
   case "$(uname -s)" in
     Darwin) run "git config --global core.autocrlf input" ;;
     *) run "git config --global core.autocrlf input" ;;

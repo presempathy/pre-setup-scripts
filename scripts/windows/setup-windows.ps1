@@ -2,6 +2,14 @@
 # Presempathy Windows Setup (PowerShell) - zero external dependencies
 
 $ErrorActionPreference = "Stop"
+$LogDir = Join-Path $env:USERPROFILE ".presempathy-setup\logs"
+New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
+$LogFile = Join-Path $LogDir ("setup-" + (Get-Date -Format "yyyyMMdd-HHmmss") + ".log")
+Start-Transcript -Path $LogFile -Force | Out-Null
+$LogDir = Join-Path $env:USERPROFILE ".presempathy-setup\logs"
+New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
+$LogFile = Join-Path $LogDir ("setup-" + (Get-Date -Format "yyyyMMdd-HHmmss") + ".log")
+Start-Transcript -Path $LogFile -Force | Out-Null
 
 function Write-Section($Title) {
   Clear-Host
@@ -92,10 +100,18 @@ if ($select -notmatch "^[Nn]") { Run-Cmd "uv python select --global latest" }
 if (-not (Command-Exists "git")) {
   Write-Host "Please install Git for Windows (Git Credential Manager included): https://git-scm.com/download/win" -ForegroundColor Yellow
   Read-Host "Press Enter after installing Git to continue"
+Run-Cmd "git config --global push.autoSetupRemote true"
+Run-Cmd "git config --global tag.sort -version:refname"
+Run-Cmd "git config --global rebase.autoStash true"
+Run-Cmd "git config --global merge.ff only"
 }
 if (Command-Exists "git") { git --version }
 
 # Git best practices
+Run-Cmd "git config --global push.autoSetupRemote true"
+Run-Cmd "git config --global tag.sort -version:refname"
+Run-Cmd "git config --global rebase.autoStash true"
+Run-Cmd "git config --global merge.ff only"
 Run-Cmd "git config --global init.defaultBranch main"
 Run-Cmd "git config --global pull.rebase false"
 Run-Cmd "git config --global fetch.prune true"

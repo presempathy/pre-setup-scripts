@@ -17,8 +17,8 @@ ssh_generate_key_if_missing() {
     local email="$1"
     run "ssh-keygen -t ed25519 -C \"${email}\" -f \"${key}\" -N \"\"" || return 1
   fi
-  chmod 600 "${key}"
-  chmod 644 "${key}.pub"
+  if [ -f "${key}" ]; then chmod 600 "${key}"; fi
+  if [ -f "${key}.pub" ]; then chmod 644 "${key}.pub"; fi
 }
 
 ssh_configure_github() {
@@ -53,10 +53,20 @@ ssh_add_to_agent() {
   if [ -z "${SSH_AUTH_SOCK:-}" ]; then
     eval "$(ssh-agent -s)" >/dev/null 2>&1 || true
   fi
-  run "ssh-add -q \"${HOME}/.ssh/id_ed25519\"" || true
+  if [ -f "${HOME}/.ssh/id_ed25519" ]; then
+    run "ssh-add -q \"${HOME}/.ssh/id_ed25519\"" || true
+  fi
 }
 
 ssh_test_github() {
   say "${BLUE}${DOT} Testing GitHub SSH connectivity${RESET}"
-  run "ssh -o StrictHostKeyChecking=accept-new -T git@github.com" || return 1
+  set +e
+  out="$(ssh -o StrictHostKeyChecking=accept-new -T git@github.com 2>&1)"
+  code="$?"
+  set -e
+  say "$out"
+  if echo "$out" | grep -qi "successfully authenticated" || echo "$out" | grep -qi "Hi .*! You've successfully authenticated"; then
+    return 0
+  fi
+  return "$code"
 }
