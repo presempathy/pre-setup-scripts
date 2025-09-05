@@ -18,7 +18,27 @@ main() {
   say "${BOLD}This script will prepare your system for Presempathy development.${RESET}"
   say "It will install and configure uv, Python, git, and SSH for GitHub."
   hr
+  render_dashboard
+  hr
+  os_info="$(detect_linux_distro)"
+  is_nixos="$(detect_nixos)"
+  in_container="$(detect_container)"
 
+  if [ "${is_nixos}" = "1" ]; then
+    say "${YELLOW}${DOT} Detected NixOS. Using user-profile installs where possible.${RESET}"
+    if command_exists nix && confirm "Install git into user profile using nix profile?"; then
+      run "nix profile install nixpkgs#git" || true
+    fi
+  fi
+
+  if [ "${in_container}" = "1" ]; then
+    if [ -f /etc/debian_version ]; then
+      say "${BLUE}${DOT} Detected Debian-based container. Installing minimal tooling.${RESET}"
+      require_sudo || true
+      run "sudo apt-get update" || true
+      run "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y curl ca-certificates git openssh-client" || true
+    fi
+  fi
   read -r -p "What is your name? " full_name || full_name=""
   while [ -z "${full_name%% *}" ]; do
     read -r -p "Please enter at least a first name: " full_name || full_name=""

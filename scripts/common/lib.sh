@@ -6,7 +6,10 @@ LOG_DIR="${HOME}/.presempathy-setup/logs"
 LOG_FILE="${LOG_DIR}/setup-$(date +%Y%m%d-%H%M%S).log"
 mkdir -p "${LOG_DIR}"
 
-if [ -t 1 ] && command -v tput >/dev/null 2>&1; then
+SHOW_COMMANDS="${SHOW_COMMANDS:-0}"
+NO_ANSI="${NO_ANSI:-0}"
+
+if [ -t 1 ] && [ "${NO_ANSI}" != "1" ] && command -v tput >/dev/null 2>&1; then
   tput colors >/dev/null 2>&1 || true
   BOLD="$(tput bold || true)"; RESET="$(tput sgr0 || true)"
   BLUE="$(tput setaf 33 || true)"; CYAN="$(tput setaf 6 || true)"
@@ -38,10 +41,38 @@ confirm() {
   esac
 }
 
+render_dashboard() {
+  clear || true
+  hr
+  say "${BOLD}${BLUE}Welcome to ${PRESEMPATHY_BRAND}${RESET}"
+  hr
+  if command_exists uv; then
+    say "uv: $(uv --version 2>/dev/null || echo found)"
+  else
+    say "uv: not found"
+  fi
+  if command_exists python3; then
+    say "python3: $(python3 --version 2>/dev/null || echo found)"
+  else
+    say "python3: not found"
+  fi
+  if command_exists git; then
+    say "git: $(git --version 2>/dev/null || echo found)"
+  else
+    say "git: not found"
+  fi
+  if [ -f "${HOME}/.ssh/id_ed25519.pub" ]; then
+    say "ssh key: present"
+  else
+    say "ssh key: missing"
+  fi
+}
 pause() { read -r -p "Press Enter to continue..." _ || true; }
 
 show_cmd() {
-  say "${CYAN}${ARROW} ${1}${RESET}"
+  if [ "${SHOW_COMMANDS}" = "1" ]; then
+    say "${CYAN}${ARROW} ${1}${RESET}"
+  fi
   log "\$ $1"
 }
 

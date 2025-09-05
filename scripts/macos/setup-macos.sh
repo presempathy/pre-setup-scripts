@@ -13,6 +13,11 @@ COMMON="${DIR}/../common"
 main() {
   title
   say "${BOLD}macOS setup starting...${RESET}"
+  if ! xcode-select -p >/dev/null 2>&1; then
+    say "${BLUE}${DOT} Installing Xcode Command Line Tools${RESET}"
+    xcode-select --install || true
+    pause
+  fi
   "${DIR}/../linux/setup-linux.sh"
 }
 

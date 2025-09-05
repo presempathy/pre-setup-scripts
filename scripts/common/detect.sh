@@ -21,3 +21,43 @@ detect_linux_distro() {
     echo "unknown::"
   fi
 }
+
+detect_nixos() {
+  if [ -e /etc/NIXOS ] || [ -x /run/current-system/sw/bin/nix ]; then
+    echo 1
+  else
+    echo 0
+  fi
+}
+
+detect_container() {
+  if [ -f /.dockerenv ]; then
+    echo 1
+    return
+  fi
+  if grep -qaE '(docker|lxc|containerd|kubepods)' /proc/1/cgroup 2>/dev/null; then
+    echo 1
+  else
+    echo 0
+  fi
+}
+
+detect_nixos() {
+  if [ -e /etc/NIXOS ] || [ -x /run/current-system/sw/bin/nix ]; then
+    echo 1
+  else
+    echo 0
+  fi
+}
+
+detect_container() {
+  if [ -f /.dockerenv ]; then
+    echo 1
+    return
+  fi
+  if grep -qaE '(docker|lxc|containerd|kubepods)' /proc/1/cgroup 2>/dev/null; then
+    echo 1
+  else
+    echo 0
+  fi
+}
