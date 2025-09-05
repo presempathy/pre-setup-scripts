@@ -1,0 +1,33 @@
+SOFTWARE LICENSE AGREEMENT
+
+md-to-notion
+
+Copyright (c) 2024 Markdown to Notion Converter Project
+All Rights Reserved.
+
+PROPRIETARY AND CONFIDENTIAL
+
+This software and associated documentation files (the "Software") are the proprietary and confidential property of the copyright holder.
+
+License Terms
+The Software is licensed to authorized users under the terms of a separate End-User License Agreement (EULA) and may not be used, copied, modified, or distributed except in accordance with the terms of that agreement.
+
+Restrictions
+- No unauthorized use, copying, modification, or distribution
+- No reverse engineering or decompilation
+- No redistribution without explicit written permission
+- No commercial use without proper licensing
+
+Authorization Required
+To obtain authorization for use of this Software, please contact the copyright holder for licensing terms and conditions.
+
+Legal Notice
+This license agreement is governed by applicable copyright and intellectual property laws. Unauthorized use of this Software may result in legal action.
+
+For licensing inquiries, please contact:
+Email: awb@presempathy.com
+Contact: Andrew Briscoe
+
+Document Version: 1.0
+Last Updated: 2025
+License Type: Proprietary/Confidential

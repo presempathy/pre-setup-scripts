@@ -1,0 +1,11 @@
+To: awb@presempathy.com
+Subject: Request access to presempathy/setup-local-dev
+
+Hi Andrew,
+
+This is {{FULL_NAME}} ({{GITHUB_USERNAME}}) requesting access to the repository presempathy/setup-local-dev.
+I ran the onboarding script and SSH setup completed, but cloning was denied.
+
+Personal note (fill in here):
+
+Thanks!
