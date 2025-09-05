@@ -20,7 +20,6 @@ main() {
   hr
   render_dashboard
   hr
-  os_info="$(detect_linux_distro)"
   is_nixos="$(detect_nixos)"
   in_container="$(detect_container)"
 
@@ -61,10 +60,26 @@ main() {
 
   hr
   say "${BOLD}Status report:${RESET}"
-  command_exists uv && say "uv: $(uv --version 2>/dev/null || echo found)" || say "uv: not found"
-  command_exists python3 && say "python3: $(python3 --version 2>/dev/null || echo found)" || say "python3: not found"
-  command_exists git && say "git: $(git --version 2>/dev/null || echo found)" || say "git: not found"
-  [ -f "${HOME}/.ssh/id_ed25519.pub" ] && say "ssh key: present" || say "ssh key: missing"
+  if command_exists uv; then
+    say "uv: $(uv --version 2>/dev/null || echo found)"
+  else
+    say "uv: not found"
+  fi
+  if command_exists python3; then
+    say "python3: $(python3 --version 2>/dev/null || echo found)"
+  else
+    say "python3: not found"
+  fi
+  if command_exists git; then
+    say "git: $(git --version 2>/dev/null || echo found)"
+  else
+    say "git: not found"
+  fi
+  if [ -f "${HOME}/.ssh/id_ed25519.pub" ]; then
+    say "ssh key: present"
+  else
+    say "ssh key: missing"
+  fi
   hr
 
   uv_detect || uv_install
@@ -128,10 +143,18 @@ Personal note (fill in here):
 Thanks!
 " > "${HOME}/presempathy-tests/request-access-email.txt"
     say "Draft saved at: ${HOME}/presempathy-tests/request-access-email.txt"
+    if [ "${DRY_RUN:-false}" = "true" ] || [ "${DRY_RUN:-0}" = "1" ]; then
+      say "${YELLOW}${DOT} Dry-run complete. Skipping failure exit.${RESET}"
+      exit 0
+    fi
     exit 1
   }
 
-  say "${GREEN}${CHECK} All good, ${first_name}! Your environment is ready.${RESET}"
+  if [ "${DRY_RUN:-false}" = "true" ] || [ "${DRY_RUN:-0}" = "1" ]; then
+    say "${GREEN}${CHECK} Dry-run completed for ${first_name}. No changes were made.${RESET}"
+  else
+    say "${GREEN}${CHECK} All good, ${first_name}! Your environment is ready.${RESET}"
+  fi
 }
 
 main "$@"
