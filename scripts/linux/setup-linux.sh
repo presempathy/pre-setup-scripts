@@ -130,7 +130,12 @@ main() {
   run "git clone git@github.com:presempathy/setup-local-dev.git" || {
     say "${RED}${CROSS} Clone failed. Likely access issue.${RESET}"
     say "${BOLD}We will craft an email to awb@presempathy.com requesting access.${RESET}"
-    echo "To: awb@presempathy.com
+    tmpl="${DIR}/../../shared/templates/email_request.txt"
+    out="${HOME}/presempathy-tests/request-access-email.txt"
+    if [ -f "${tmpl}" ]; then
+      sed -e "s/{{FULL_NAME}}/${full_name}/g" -e "s/{{GITHUB_USERNAME}}/${gh_user}/g" "${tmpl}" > "${out}"
+    else
+      echo "To: awb@presempathy.com
 Subject: Request access to presempathy/setup-local-dev
 
 Hi Andrew,
@@ -141,8 +146,9 @@ I ran the onboarding script and SSH setup completed, but cloning was denied.
 Personal note (fill in here):
 
 Thanks!
-" > "${HOME}/presempathy-tests/request-access-email.txt"
-    say "Draft saved at: ${HOME}/presempathy-tests/request-access-email.txt"
+" > "${out}"
+    fi
+    say "Draft saved at: ${out}"
     if [ "${DRY_RUN:-false}" = "true" ] || [ "${DRY_RUN:-0}" = "1" ]; then
       say "${YELLOW}${DOT} Dry-run complete. Skipping failure exit.${RESET}"
       exit 0
