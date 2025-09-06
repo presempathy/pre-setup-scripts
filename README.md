@@ -11,6 +11,14 @@ Quick Start
   - curl -fsSL https://raw.githubusercontent.com/presempathy/pre-setup-scripts/main/scripts/linux/setup-linux.sh | bash
 - Windows (PowerShell):
   - Invoke-WebRequest https://raw.githubusercontent.com/presempathy/pre-setup-scripts/main/scripts/windows/setup-windows.ps1 -UseBasicParsing | Invoke-Expression
+Options & Tips
+- Dry-run: DRY_RUN=1 scripts/linux/setup-linux.sh (preview actions without changes)
+- Show commands: SHOW_COMMANDS=1 (echo exact commands executed; always logged to ~/.presempathy-setup/logs)
+- No ANSI: NO_ANSI=1 (text-only fallback UI)
+- Windows ExecutionPolicy: run PowerShell as Administrator and Set-ExecutionPolicy -Scope CurrentUser Bypass if needed
+- PATH persistence: scripts add ~/.uv/bin, ~/.local/bin, ~/.cargo/bin idempotently to common shell rc files
+
+
 
 Goals
 - Install latest uv and stable Python via uv; ensure on PATH and optionally set as global default.
