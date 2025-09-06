@@ -1,6 +1,6 @@
 SOFTWARE LICENSE AGREEMENT
 
-md-to-notion
+pre-setup-scripts
 
 Copyright (c) 2024 Markdown to Notion Converter Project
 All Rights Reserved.
