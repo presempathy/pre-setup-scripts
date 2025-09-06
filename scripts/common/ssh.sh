@@ -32,7 +32,9 @@ ssh_configure_github() {
     /# <<< prese github <<</ {skip=0; next}
     skip==0{print}' "${cfg}" > "${cfg}.tmp" || true
   mv "${cfg}.tmp" "${cfg}"
-  cat >> "${cfg}" <<EOF
+  {
+    echo "# >>> prese github >>>"
+    cat <<EOF
 Host github.com
   HostName github.com
   User git
@@ -42,10 +44,11 @@ Host github.com
   ServerAliveInterval 60
   ServerAliveCountMax 3
 EOF
-  if [ "$(uname -s)" = "Darwin" ]; then
-    echo "  UseKeychain yes" >> "${cfg}"
-  fi
-  echo "# <<< prese github <<<" >> "${cfg}"
+    if [ "$(uname -s)" = "Darwin" ]; then
+      echo "  UseKeychain yes"
+    fi
+    echo "# <<< prese github <<<"
+  } >> "${cfg}"
   say "${GREEN}${CHECK} ssh config updated for GitHub${RESET}"
 }
 
