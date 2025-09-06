@@ -174,7 +174,13 @@ try {
 } catch {
   Write-Host "✖ Clone failed. Drafting email to request access." -ForegroundColor Yellow
   $emailPath = Join-Path $work "request-access-email.txt"
-  @"
+  $tmpl = Join-Path (Join-Path $PSScriptRoot "..\..\shared\templates") "email_request.txt"
+  if (Test-Path $tmpl) {
+    $content = Get-Content $tmpl -Raw
+    $content = $content.Replace("{{FULL_NAME}}", $name).Replace("{{GITHUB_USERNAME}}", $ghUser)
+    Set-Content -Path $emailPath -Value $content -NoNewline
+  } else {
+    @"
 To: awb@presempathy.com
 Subject: Request access to presempathy/setup-local-dev
 
@@ -187,6 +193,7 @@ Personal note (fill in here):
 
 Thanks!
 "@ | Set-Content -Path $emailPath -NoNewline
+  }
   Write-Host ("Draft saved at: " + $emailPath)
   exit 1
 }
