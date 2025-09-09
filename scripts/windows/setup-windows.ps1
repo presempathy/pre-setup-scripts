@@ -87,10 +87,13 @@ if (-not (Command-Exists "uv")) {
 # Upgrade uv
 try { uv self update | Out-Null } catch {}
 
-# Python latest via uv
-Run-Cmd "uv python install --latest"
+# Python latest via uv (uv >= 0.8)
 $select = Read-Host "Set latest Python as global default? [Y/n]"
-if ($select -notmatch "^[Nn]") { Run-Cmd "uv python select --global latest" }
+if ($select -notmatch "^[Nn]") {
+  Run-Cmd "uv python install --default"
+} else {
+  Run-Cmd "uv python install"
+}
 
 # Git detect (install guidance; no external package manager requirement)
 if (-not (Command-Exists "git")) {

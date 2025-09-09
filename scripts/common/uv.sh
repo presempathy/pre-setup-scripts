@@ -33,7 +33,10 @@ uv_upgrade_if_needed() {
 
 uv_python_latest_install_and_select() {
   say "${BLUE}${DOT} Installing latest stable Python via uv${RESET}"
-  run "uv python install --latest" || return 1
-  confirm "Set latest Python as global default for uv?" && run "uv python select --global latest"
+  if confirm "Set latest Python as global default for uv?"; then
+    run "uv python install --default" || return 1
+  else
+    run "uv python install" || return 1
+  fi
   run "uv python list"
 }
